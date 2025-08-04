@@ -30,24 +30,24 @@ router.post("/", async (req, res) => {
 //  on completing task
 router.put("/:id", async (req, res) => {
   const { id } = req.params;
-  const { title, description, iscompleted } = req.body;
- if (!title) {
-    return res.status(400).json({ message: "Title not found it very dorkari are required." });
-  }
+  const { iscompleted } = req.body;
+  // if (!isCompleted) {
+  //   return res.status(400).json({ message: "Updated value not found" });
+  // }
+
   try {
     const updatedTask = await Task.findByIdAndUpdate(
       id,
-      { title, description, iscompleted: true },
+      { iscompleted: iscompleted },
       { new: true }
     );
-    res.status(200).json({ message: "Task completed successfully", task: updatedTask });
+
+    res.status(200).json({ message: "Task updated successfully", updatedTask });
   } catch (error) {
-    console.error("task is not updated:", error);
-    res.status(400).json({ message: " updating task error" });
+    console.error("Task failed to be updated", error);
+  res.status(400).json({ message: "Task failed to be updated" });
   }
-}); 
-
-
+});
 
 // task delete (use .findByIdAndDelete() method)
 

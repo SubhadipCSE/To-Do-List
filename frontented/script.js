@@ -42,7 +42,7 @@ async function loadTasks() {
     li.innerHTML = `<div class="left_div">
           <input type="checkbox" name="" id="" class="checkbox" ${
             task.iscompleted ? "checked" : ""
-          } />
+          }  onclick="toggleUpdate('${task._id}', ${!task.iscompleted})"/>
           <details>
             <summary class="taskTitle">${task.title}</summary>
             <br />
@@ -50,9 +50,39 @@ async function loadTasks() {
           </details>
         </div>
 
-        <button class="delete_btn">Delete</button>`;
+        <button class="delete_btn" onclick="deleteTask('${task._id}')">Delete</button>`;
     taskList.appendChild(li);
   });
 }
 
 loadTasks();
+// put delete request
+// let checkbox
+// async function handlecheckbox(id , iscompleted) {
+//  await loadTasks();
+//  checkbox = document.querySelectorAll(".checkbox");
+
+// }
+// handlecheckbox();
+// async function handleDeleteClick(id) {}
+async function toggleUpdate(id, iscompleted) {
+  const response = await fetch(`${API}/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ iscompleted }),
+  });
+console.log(response.json())
+
+   await loadTasks();
+
+}
+
+// delete
+async function deleteTask(id) {
+  const response = await fetch(`${API}/${id}`, {
+    method: "DELETE"
+  });
+  loadTasks();
+}
